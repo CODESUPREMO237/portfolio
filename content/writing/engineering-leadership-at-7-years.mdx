@@ -1,0 +1,39 @@
+## The Evolution of the Senior Engineer
+
+Early in my career, I assumed principal engineers were just faster coders. That assumption was wrong.
+
+As you move from senior to staff/principal, your output shifts from code volume to risk reduction and leverage creation.
+
+### Dictating Trade-offs
+
+Engineering is choosing the right imperfect system for current business constraints.
+
+- **Do we need Kafka?** Not for tiny workloads. A Postgres queue with `FOR UPDATE SKIP LOCKED` may be enough.
+- **Do we need microservices?** Usually only when team coupling cost exceeds distributed-system operational tax.
+
+Principal-level engineering is often saying no to unnecessary complexity while preserving future options.
+
+### Deleting Code as Leverage
+
+One of my highest-impact PRs was deleting tens of thousands of lines from a legacy billing engine.
+
+Code is liability:
+
+- it must be patched
+- it must be monitored
+- it must be maintained through platform changes
+
+Sometimes the highest leverage move is changing product requirements so software does not need to exist.
+
+### Mentorship Through Architecture
+
+If operating your system requires every engineer to be exceptional, the system design is weak.
+
+Good architecture creates pits of success:
+
+- safe defaults in CI/CD
+- typed contracts and boundaries
+- observability that makes failure obvious
+- guardrails that make the right path the easiest path
+
+Leadership at this level is building systems and processes that let the whole org move faster with lower risk.

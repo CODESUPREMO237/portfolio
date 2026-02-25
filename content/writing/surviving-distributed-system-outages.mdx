@@ -1,0 +1,42 @@
+## The Thundering Herd Problem
+
+We experienced a severe outage on Black Friday in 2024. The root cause was not app code and not the primary database. It was a single Redis key expiration.
+
+When a high-traffic key is cached with a strict TTL, it behaves perfectly until that TTL hits zero.
+
+### The Stampede
+
+At 12:05 PM, the key expired. In milliseconds, thousands of requests hit a cache miss simultaneously.
+
+Every request then opened a database connection to rebuild the same value. The pool exhausted, requests hung, health checks failed, and pods were removed from the load balancer.
+
+### The Mitigation: Probabilistic Early Expiration
+
+Also known as XFetch. Do not wait for hard expiry. As a key approaches expiry, allow one request to proactively refresh in the background while others still serve stale-but-safe data.
+
+```python
+def xfetch(key, ttl, beta=1.0):
+    cache_record = redis.get(key)
+    if not cache_record:
+        return recompute_and_cache(key)
+
+    delta = cache_record.computation_time
+    expiry = cache_record.expiry
+
+    if time.time() - delta * beta * math.log(random.random()) > expiry:
+        enqueue_background_refresh(key)
+
+    return cache_record.value
+```
+
+### Circuit Breaking
+
+The second failure was missing circuit breakers. As DB latency rose, threads piled up and memory pressure exploded.
+
+A resilient system fails fast:
+
+- trip breaker when DB P99 exceeds the threshold
+- return `503` or controlled fallback
+- preserve thread pools and give dependencies time to recover
+
+Fast failure under pressure is better than slow total collapse.

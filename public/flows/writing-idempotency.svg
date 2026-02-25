@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="1200" height="620">
+  <rect width="1200" height="620" fill="#0b1220"/>
+  
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6366f1"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+    </marker>
+  </defs>
+  
+  <rect width="1200" height="620" fill="url(#grid)"/>
+
+  <text x="600" y="50" fill="#e2e8f0" font-family="monospace" font-size="20" font-weight="bold" text-anchor="middle" letter-spacing="2">Idempotent Request Flow</text>
+
+  <!-- Client -->
+  <g transform="translate(150, 260)">
+    <rect width="140" height="80" rx="12" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+    <text x="70" y="45" fill="#e2e8f0" font-family="monospace" font-size="16" font-weight="bold" text-anchor="middle">Client App</text>
+  </g>
+
+  <!-- API Server -->
+  <g transform="translate(450, 150)">
+    <rect width="200" height="300" rx="12" fill="#0f172a" stroke="#6366f1" stroke-width="2"/>
+    <text x="100" y="40" fill="#e2e8f0" font-family="monospace" font-size="16" font-weight="bold" text-anchor="middle">API Gateway / Payment Service</text>
+    <text x="100" y="65" fill="#6366f1" font-family="monospace" font-size="12" text-anchor="middle">POST /v1/charge (Idempotency-Key)</text>
+    
+    <g transform="translate(20, 90)">
+      <rect width="160" height="40" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+      <text x="80" y="25" fill="#cbd5e1" font-family="monospace" font-size="12" text-anchor="middle">1. Extract Key</text>
+    </g>
+    <g transform="translate(20, 150)">
+      <rect width="160" height="40" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+      <text x="80" y="25" fill="#cbd5e1" font-family="monospace" font-size="12" text-anchor="middle">2. Check Redis DB</text>
+    </g>
+    <g transform="translate(20, 210)">
+      <rect width="160" height="40" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+      <text x="80" y="25" fill="#cbd5e1" font-family="monospace" font-size="12" text-anchor="middle">3. Process &amp; Lock</text>
+    </g>
+  </g>
+
+  <!-- Idempotency Store -->
+  <g transform="translate(850, 170)">
+    <path d="M 0 15 Q 80 -10 160 15 L 160 90 Q 80 115 0 90 Z" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+    <text x="80" y="55" fill="#ef4444" font-family="monospace" font-size="16" font-weight="bold" text-anchor="middle">Redis Cache</text>
+    <text x="80" y="75" fill="#94a3b8" font-family="monospace" font-size="12" text-anchor="middle">TTL: 24 Hours</text>
+  </g>
+
+  <!-- Database -->
+  <g transform="translate(850, 350)">
+    <path d="M 0 15 Q 80 -10 160 15 L 160 90 Q 80 115 0 90 Z" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+    <text x="80" y="55" fill="#10b981" font-family="monospace" font-size="16" font-weight="bold" text-anchor="middle">PostgreSQL</text>
+    <text x="80" y="75" fill="#94a3b8" font-family="monospace" font-size="12" text-anchor="middle">Transaction Store</text>
+  </g>
+
+  <!-- Paths -->
+  <!-- Attempt 1 -->
+  <path d="M 290 280 L 450 280" fill="none" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="370" y="270" fill="#6366f1" font-family="monospace" font-size="12" text-anchor="middle">Request A</text>
+  
+  <!-- Redis check -->
+  <path d="M 650 220 L 850 220" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="750" y="210" fill="#ef4444" font-family="monospace" font-size="12" text-anchor="middle">SETNX key (miss)</text>
+
+  <!-- DB Write -->
+  <path d="M 650 380 L 850 380" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="750" y="370" fill="#10b981" font-family="monospace" font-size="12" text-anchor="middle">Commit txn</text>
+
+  <!-- Redis update -->
+  <path d="M 650 250 L 850 250" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrowRed)"/>
+  <text x="750" y="270" fill="#ef4444" font-family="monospace" font-size="12" text-anchor="middle">SET key = 200 OK</text>
+
+  <!-- Attempt 2 (Retry) -->
+  <path d="M 290 320 L 450 320" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)"/>
+  <text x="370" y="310" fill="#94a3b8" font-family="monospace" font-size="12" text-anchor="middle">Retry Request A</text>
+  
+  <path d="M 450 360 L 290 360" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="370" y="380" fill="#10b981" font-family="monospace" font-size="12" text-anchor="middle">Return Cache (200 OK)</text>
+
+</svg>

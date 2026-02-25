@@ -1,0 +1,43 @@
+## The Reality of 10TB+ PostgreSQL Clusters
+
+When your database fits in RAM, migrations are easy. You run `ALTER TABLE ADD COLUMN`, the ORM handles it, and you move on. When your table is 5 billion rows wide, taking an exclusive lock for even 5 seconds means dropping thousands of active customer sessions.
+
+At my previous role, we managed a global fleet of PostgreSQL databases handling payment processing. Downtime was measured in thousands of dollars per minute. Here is the operational playbook we used for making structural changes to high-throughput tables without scheduling maintenance windows.
+
+### 1. The Anatomy of an Exclusive Lock
+
+Every DDL command in Postgres requires an `AccessExclusiveLock`. If a long-running transaction (for example, a 5-minute reporting query) is already running, your `ALTER TABLE` queues behind it. Once queued, all subsequent queries on that table queue behind your `ALTER TABLE`.
+
+That is how platform-wide outages start.
+
+#### The Rule of Statement Timeouts
+
+Set an aggressive `lock_timeout` for migrations:
+
+```sql
+SET lock_timeout TO '2s';
+ALTER TABLE payment_events ADD COLUMN idempotency_key VARCHAR(255);
+```
+
+If lock acquisition takes longer than 2 seconds, the migration aborts and production traffic stays healthy.
+
+### 2. The Expand and Contract Pattern
+
+Never rename or drop a column while application code still depends on it. Roll out in phases:
+
+- **Phase 1: Expand.** Add the new schema. Write to both old and new paths, keep reads on old.
+- **Phase 2: Backfill.** Backfill historical records asynchronously in bounded batches.
+- **Phase 3: Transition.** Switch reads to the new schema after parity validation.
+- **Phase 4: Contract.** Remove old schema only after older application versions are fully drained.
+
+### 3. Creating Indexes Concurrently
+
+A standard `CREATE INDEX` blocks writes. Use:
+
+```sql
+CREATE INDEX CONCURRENTLY idx_users_email ON users (email);
+```
+
+It takes longer, but keeps write traffic alive while the index is built.
+
+Ultimately, infrastructure longevity comes down to respecting the database as the durable source of truth. Code rolls back quickly; schema changes require deliberate orchestration.

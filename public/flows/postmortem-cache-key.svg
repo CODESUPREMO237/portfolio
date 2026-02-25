@@ -1,0 +1,21 @@
+<svg width="1200" height="620" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d">
+  <title id="t">Cache Key Collision Incident Timeline</title>
+  <desc id="d">Timeline style incident flow for cache key collision</desc>
+  <rect width="1200" height="620" fill="#0a1222"/>
+  <text x="64" y="82" fill="#e2e8f0" font-family="Segoe UI" font-size="30" font-weight="700">Cache Key Collision - Incident Timeline</text>
+  <rect x="52" y="112" width="1096" height="470" rx="18" fill="#111b2e" stroke="#334155"/>
+
+  <line x1="130" y1="330" x2="1080" y2="330" stroke="#475569" stroke-width="4"/>
+
+  <circle cx="180" cy="330" r="16" fill="#ef4444"/><text x="150" y="370" fill="#fecaca" font-size="13" font-family="Segoe UI">09:40</text>
+  <rect x="110" y="214" width="140" height="84" rx="12" fill="#3b1f2c" stroke="#fb7185"/><text x="122" y="262" fill="#fee2e2" font-size="16" font-family="Segoe UI">Refactor deploy</text>
+
+  <circle cx="430" cy="330" r="16" fill="#f59e0b"/><text x="402" y="370" fill="#fde68a" font-size="13" font-family="Segoe UI">09:52</text>
+  <rect x="348" y="214" width="164" height="84" rx="12" fill="#402d1f" stroke="#f59e0b"/><text x="364" y="262" fill="#fef3c7" font-size="16" font-family="Segoe UI">Tenant key missing</text>
+
+  <circle cx="680" cy="330" r="16" fill="#38bdf8"/><text x="652" y="370" fill="#bae6fd" font-size="13" font-family="Segoe UI">10:02</text>
+  <rect x="600" y="214" width="160" height="84" rx="12" fill="#1b3148" stroke="#38bdf8"/><text x="620" y="262" fill="#e0f2fe" font-size="16" font-family="Segoe UI">Read bleed seen</text>
+
+  <circle cx="930" cy="330" r="16" fill="#22c55e"/><text x="902" y="370" fill="#bbf7d0" font-size="13" font-family="Segoe UI">10:17</text>
+  <rect x="850" y="214" width="160" height="84" rx="12" fill="#1f3a2d" stroke="#22c55e"/><text x="874" y="262" fill="#dcfce7" font-size="16" font-family="Segoe UI">Guardrail fix</text>
+</svg>
