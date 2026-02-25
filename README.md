@@ -57,19 +57,4 @@ docs/
   postmortems/
 ```
 
-## Content Strategy
-- Homepage positions you as a systems engineer and technical leader.
-- Case studies include:
-  - Problem and constraints
-  - Architecture and trade-offs
-  - Reliability and scaling strategy
-  - Metrics and outcome
-  - Next-iteration improvements
-- Writing section demonstrates engineering judgment.
-- System design and postmortem sections demonstrate maturity and operational ownership.
 
-## Customization Path
-1. Replace sample data in `src/data/*.ts` with your real projects and numbers.
-2. Add/replace architecture diagrams under `public/diagrams`.
-3. Add real design docs and postmortems under `docs/`.
-4. Connect contact/social metadata in header/footer if needed.
