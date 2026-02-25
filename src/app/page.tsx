@@ -66,21 +66,21 @@ export default function Home() {
             <div className="flex flex-wrap gap-4 pt-4">
               <Link
                 href="/case-studies"
-                className="px-6 py-3 rounded-full bg-[#DDFF00]/10 text-[#DDFF00] font-medium border border-[#DDFF00]/20 hover:bg-[#DDFF00]/20 hover:border-[#DDFF00]/40 transition-all flex items-center gap-2"
+                className="px-6 py-3 rounded-full bg-[#DDFF00]/10 text-[#DDFF00] font-medium border border-[#DDFF00]/20 hover:bg-[#DDFF00]/20 hover:border-[#DDFF00]/40 transition-all flex items-center justify-center gap-2 w-full sm:w-auto"
               >
                 Explore architecture case studies
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
               </Link>
               <Link
                 href="/system-design"
-                className="px-6 py-3 rounded-full bg-[#111118] text-[#9A9AAA] font-medium border border-[#252535] hover:bg-[#16161F] hover:text-[#F0EDE8] transition-all"
+                className="px-6 py-3 rounded-full bg-[#111118] text-[#9A9AAA] font-medium border border-[#252535] hover:bg-[#16161F] hover:text-[#F0EDE8] transition-all flex items-center justify-center w-full sm:w-auto"
               >
                 Review public design docs
               </Link>
               <a
                 href="/cv/tchabeu_stephane.pdf"
                 download
-                className="px-6 py-3 rounded-full bg-[#44FFD2]/10 text-[#44FFD2] font-medium border border-[#44FFD2]/20 hover:bg-[#44FFD2]/20 hover:border-[#44FFD2]/40 transition-all"
+                className="px-6 py-3 rounded-full bg-[#44FFD2]/10 text-[#44FFD2] font-medium border border-[#44FFD2]/20 hover:bg-[#44FFD2]/20 hover:border-[#44FFD2]/40 transition-all flex items-center justify-center w-full sm:w-auto"
               >
                 Download CV
               </a>
